@@ -1,5 +1,21 @@
 #!/bin/bash
 
+#
+# Update_IP.sh Coded by Mrmagicpie
+#
+# This script will update your IP(via 'curl ifconfig.me') on a remote server! 
+#
+# This is insanly customizable!! Make sure to check the config. The config will generate
+# once you run the script for the first time!
+#
+# Report issues here: 
+# https://github.com/Mrmagicpie/Bash/issues
+#
+
+# Start the actual codey bits! :D
+
+# # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # 
+
 dir=$(pwd)
 time=$(date +'%r')
 script_config_version="1"
