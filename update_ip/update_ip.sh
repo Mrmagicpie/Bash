@@ -20,6 +20,7 @@ dir=$(pwd)
 time=$(date +'%r')
 script_config_version="1"
 ssh_attempted="0"
+script_version="1"
 
 config(){
 	# Echo the current config into the config.sh
@@ -300,123 +301,127 @@ fi
 
 if [ "$query_update" = "y" ]; then # Checking if a script/config update is available
 	curl -o "$dir/IP-update.txt" "https://assets.mrmagicpie.xyz/update_ip/IP-update.txt" # Downloading TXT file containing the update status
+	curl -o "$dir/update_version.txt" "https://assets.mrmagicpie.xyz/update_ip/update_version.txt"
 	update_check="cat $dir/IP-update.txt"
-    if [ "$update_check" = "An update is available" ]; then # Checking if the TXT file says theres an update
-		echo " "
-		echo "There is an update available! Review the update at https://github.com/Mrmagicpie/Bash"
-		echo " "
-		echo "Please respond with 'y' for yes, and 'n' for no, this will timeout in 25 seconds!"
-		echo " "
-		read -t 25 -p "Would you like to update now? (y/n) " update_maybe # Asking the user if they'd like to update. 
-																		  # This will timeout to prevent the script from stopping when no user is present!
-
-		if [ "$update_maybe" = "y" ] || [ "$update_maybe" = "yes" ]; then # Processing user input
-            0="$0"
-            echo " "
-			echo "We will update this script shortly!"
+	update_version="cat $dir/update_version.txt"
+	if [ "$config_version" != "$update_version" ]; then
+		if [ "$update_check" = "An update is available" ]; then # Checking if the TXT file says theres an update
 			echo " "
-			for x in {1..100} ; do
-                prog "$x"
-                sleep .1 
-            done; echo " "
-            curl -o "$dir/update_type.txt" "https://assets.mrmagicpie.xyz/update_ip/update_type.txt"
-            update_type="cat $dir/update_type.txt"
-            if [ "$update_type" = "1" ]; then
-                
-                if [ "$log" = "y" ]; then
-                    echo "[INFO][$time] A basic script update has been indicated, continuing with update!" >> "$logs"
-                fi 
+			echo "There is an update available! Review the update at https://github.com/Mrmagicpie/Bash"
+			echo " "
+			echo "Please respond with 'y' for yes, and 'n' for no, this will timeout in 25 seconds!"
+			echo " "
+			read -t 25 -p "Would you like to update now? (y/n) " update_maybe # Asking the user if they'd like to update. 
+																			# This will timeout to prevent the script from stopping when no user is present!
 
-                if ! [ -f "$dir/$0.old_update" ]; then # Moving current script, *Yes I know this isn't recommended but it'll be fiiiineeee :tm:*
-                    mv "$dir/$0" "$dir/$0.old_update"
-                    if [ "$log" = "y" ]; then
-                        echo "[INFO][$time] Current script has been moved to $dir/$0.old_update, continuing with update!" >> "$logs"
-                    fi
-                else # Asking  for filename if the other one exsists
+			if [ "$update_maybe" = "y" ] || [ "$update_maybe" = "yes" ]; then # Processing user input
+				0="$0"
+				echo " "
+				echo "We will update this script shortly!"
+				echo " "
+				for x in {1..100} ; do
+					prog "$x"
+					sleep .1 
+				done; echo " "
+				curl -o "$dir/update_type.txt" "https://assets.mrmagicpie.xyz/update_ip/update_type.txt"
+				update_type="cat $dir/update_type.txt"
+				if [ "$update_type" = "1" ]; then
+					
+					if [ "$log" = "y" ]; then
+						echo "[INFO][$time] A basic script update has been indicated, continuing with update!" >> "$logs"
+					fi 
 
-                    if [ "$log" = "y" ]; then
-                        echo -e "\033[0;31m[WARN][$time] Default path cannot be used, asking for input from user!\033[0m" >> "$logs"
-                    fi
-                    echo " "
-                    echo "The default old_update file is in use. Please specify a new old_update script name!"
-                    echo " "
-                    read -p "Example: update_ip.sh.old_update_two " new_update_file
-                    sleep 1
-                    echo " "
-                    echo "This script will be moved to '$dir/$new_update_file'! "
-                    echo " "
-                    mv "$dir/$0" "$dir/$new_update_file"
-                    if [ "$log" = "y" ]; then
-                        echo "[INFO][$time] Current script has been moved to $dir/$new_update_file, continuing with update!" >> "$logs"
-                    fi
-                fi
+					if ! [ -f "$dir/$0.old_update" ]; then # Moving current script, *Yes I know this isn't recommended but it'll be fiiiineeee :tm:*
+						mv "$dir/$0" "$dir/$0.old_update"
+						if [ "$log" = "y" ]; then
+							echo "[INFO][$time] Current script has been moved to $dir/$0.old_update, continuing with update!" >> "$logs"
+						fi
+					else # Asking  for filename if the other one exsists
 
-                rm "$dir/update_type.txt" "$dir/IP-update.txt"
-                curl -o "$dir/$0" "https://assets.mrmagicpie.xyz/update_ip/update_ip.sh" # Downloading the new file, and saving as the old name
+						if [ "$log" = "y" ]; then
+							echo -e "\033[0;31m[WARN][$time] Default path cannot be used, asking for input from user!\033[0m" >> "$logs"
+						fi
+						echo " "
+						echo "The default old_update file is in use. Please specify a new old_update script name!"
+						echo " "
+						read -p "Example: update_ip.sh.old_update_two " new_update_file
+						sleep 1
+						echo " "
+						echo "This script will be moved to '$dir/$new_update_file'! "
+						echo " "
+						mv "$dir/$0" "$dir/$new_update_file"
+						if [ "$log" = "y" ]; then
+							echo "[INFO][$time] Current script has been moved to $dir/$new_update_file, continuing with update!" >> "$logs"
+						fi
+					fi
 
-                echo " "
-                echo "This will timeout in 25 seconds, and this script will continue!"
-                echo " "
-                read -t 25 -p "Would you like to exit this script to start the updated one? (y/n) " update_leave # Asking if the user wants to leave this script
-                                                                                                                # This will timeout incase the user leaves
+					rm "$dir/update_type.txt" "$dir/IP-update.txt"
+					curl -o "$dir/$0" "https://assets.mrmagicpie.xyz/update_ip/update_ip.sh" # Downloading the new file, and saving as the old name
 
-                if [ "$update_leave" = "y" ] || [ "$update_leave" = "yes" ]; then # Exiting if the user says yes
-                    echo " "
-                    echo -e "Exiting this script! Use \033[0;31mbash $dir/$0\033[0m to restart!"
-                    echo " "
-                    if [ "$log" = "y" ]; then
-                        echo "[INFO][$time] User has exited the script to restart with update!" >> "$logs"
-                    fi
-                    sleep 3
-                    exit
-                else # Not exiting the script
-                    echo " "
-                    echo "We will not exit this script! Continuing..."
-                    echo " "
-                    if [ "$log" = "y" ]; then
-                        echo "[INFO][$time] User has chose not to update!" >> "$logs"
-                    fi
-                    sleep 1
-                fi
+					echo " "
+					echo "This will timeout in 25 seconds, and this script will continue!"
+					echo " "
+					read -t 25 -p "Would you like to exit this script to start the updated one? (y/n) " update_leave # Asking if the user wants to leave this script
+																													# This will timeout incase the user leaves
 
-            elif [ "$update_type" = "2" ]; then
+					if [ "$update_leave" = "y" ] || [ "$update_leave" = "yes" ]; then # Exiting if the user says yes
+						echo " "
+						echo -e "Exiting this script! Use \033[0;31mbash $dir/$0\033[0m to restart!"
+						echo " "
+						if [ "$log" = "y" ]; then
+							echo "[INFO][$time] User has exited the script to restart with update!" >> "$logs"
+						fi
+						sleep 3
+						exit
+					else # Not exiting the script
+						echo " "
+						echo "We will not exit this script! Continuing..."
+						echo " "
+						if [ "$log" = "y" ]; then
+							echo "[INFO][$time] User has chose not to update!" >> "$logs"
+						fi
+						sleep 1
+					fi
 
-                if [ "$log" = "y" ]; then
-                    echo "[INFO][$time] A full update has been indicated, continuing with update!" >> "$logs"
-                fi
+				elif [ "$update_type" = "2" ]; then
 
-                rm "$dir/update_type.txt" "$dir/IP-update.txt"
-                curl -o "$dir/ip_updater.sh" "http://assets.mrmagicpie/update_ip/updater.sh"
-                bash "$dir/ip_updater.sh"
-                echo " "
-                echo "You will now be directed to a new install script!"
-                echo " "
-                if [ "$log" = "y" ]; then
-                    echo "[WARN][$time] Leaving main script! Entering update script." >> "$logs"
-                fi
-                sleep 3
-                exit
+					if [ "$log" = "y" ]; then
+						echo "[INFO][$time] A full update has been indicated, continuing with update!" >> "$logs"
+					fi
+
+					rm "$dir/update_type.txt" "$dir/IP-update.txt"
+					curl -o "$dir/ip_updater.sh" "http://assets.mrmagicpie/update_ip/updater.sh"
+					bash "$dir/ip_updater.sh"
+					echo " "
+					echo "You will now be directed to a new install script!"
+					echo " "
+					if [ "$log" = "y" ]; then
+						echo "[WARN][$time] Leaving main script! Entering update script." >> "$logs"
+					fi
+					sleep 3
+					exit
 
 
-            elif [ "$update_type" = "3" ]; then
+				elif [ "$update_type" = "3" ]; then
 
-                echo " "
-                echo "Please fetch a new update from https://github.com/Mrmagicpie/Bash"
-                echo "Your current script is not able to update automatically!!"
-                echo " "
-                sleep 3
+					echo " "
+					echo "Please fetch a new update from https://github.com/Mrmagicpie/Bash"
+					echo "Your current script is not able to update automatically!!"
+					echo " "
+					sleep 3
 
-            else
+				else
 
-                echo " "
-                echo "We're so sorry! Your current built-in updater is no longer supported, is not capable of this update, or invalid for another reason. Please manually upgrade from:"
-                echo " "
-                echo "https://github.com/Mrmagicpie/Bash"
-                echo " "
-                sleep 3
-            fi
-        fi 
-    fi 
+					echo " "
+					echo "We're so sorry! Your current built-in updater is no longer supported, is not capable of this update, or invalid for another reason. Please manually upgrade from:"
+					echo " "
+					echo "https://github.com/Mrmagicpie/Bash"
+					echo " "
+					sleep 3
+				fi
+			fi 
+		fi 
+	fi
 fi
 
 sleep "$repeat_after" # Sleep the repeat after time. Specified in config, default to 1 hour(in seconds)
