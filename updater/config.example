@@ -1,0 +1,91 @@
+#!/bin/bash
+#!/root/version_1
+
+#
+# The Mrmagicpie Updater Config
+# This config file is for the Mrmagicpie updater, it is expected that this config is sent with all
+# use cases of this updater! Without a major recode of this updater it will not function without it!
+#
+
+resource="Mrmagicpie Updater"
+# Use this variable to control what 
+# your end product is called!
+# Expected options: Word/Phrase
+
+updater_logs="y"
+# Enable custom updater logs. This will log
+# all info, warn, and fatal notices!
+# Expected options: y/n
+
+updater_logs_location="$dir/updater.log"
+# Location for the updater logs. "updater_logs"
+# must be set to "y" for these to work! You can
+# use "$dir" to reference the current script path!
+# Expected options: Filepath
+
+updater_enabled="y"
+# This is a quick setting to enable or disable the
+# updater!
+# Expected options: y/n
+
+remote_update_check_message="An update is available!"
+# This is the message that will be checked when we check
+# your "remote_update_check"! This must be exact in your 
+# file, and be on the FIRST line of your file!
+# Expected options: Full phrase
+
+remote_update_check="https://assets.mrmagicpie.xyz/update_check.txt"
+# The full url(including http/https) to your update check!
+# An update check is a file that will contain a number(1-3),
+# the number will tell the updater what type of update to perform
+# Expected options: Full URL
+
+fancy_checks="n"
+# Fancy checks are checks that will download a specific version.
+# For this to work your "remote_update_check" must include a version 
+# number on the THIRD line.
+# Expected options: y/n
+
+fancy_checks_pull="https://assets.mrmagicpie.xyz/$version-updated_script.sh"
+# This setting will only work if "fancy_checks" is set to "y", you must
+# include "$version" in your url somewhere or else this won't pull a 
+# specific version! For this to work your "remote_update_check" must include
+# a version number on the THIRD line.
+# Expected options: Full URL
+
+remote_update_pull="https://assets.mrmagicpie.xyz/updated_script.sh"
+# The path to pull from to update the full script! This would be
+# for the whole script!
+# Expected options: Full URL
+
+
+
+    # # # # # # # # # # # # # # # # # # # #
+    #        Do not edit section!         #
+    #                                     #
+    #      Editing this section will      #
+    #  result in unintended consequenses! #
+    # # # # # # # # # # # # # # # # # # # # 
+
+
+updater_update_check="https://assets.mrmagicpie.xyz/updater/update.txt"
+# Do not remove this! The updater won't check for an update for itself
+# without it! If you change this be prepared for errors!
+# No options available! (If you know what you're doing you can change this to your fork)
+
+updater_update_pull="https://assets.mrmagicpie.xyz/updater/$new_version-updated.txt"
+# Do not remove this! The updater will download it's own update if indicated! 
+# If you change this be prepared for errors!
+# No options available! (If you know what you're doing you can change this to your fork)
+
+updater_version_config="1"
+# The version of the updater
+# itself. We use this to make sure
+# versions align!
+# No options available! (Set by author)
+
+updater_config_version_config="1"
+# This config version. This is
+# used to fetch the correct config
+# from our host!
+# No options available! (Set by author)
